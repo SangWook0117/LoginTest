@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+</head>
+<body>
+    <form th:action="@{/loginProc}" method="post" name="loginForm"> 
+        <table>
+            <tr>
+                <th>이름</th>
+                <th>비밀번호</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" id="username" name="username" placeholder="이름" />
+                </td>
+                <td>
+                    <input type="password" id="password" name="password" placeholder="비밀번호" />
+                </td>
+                <td>
+                    <input type="submit" value="전송"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
