@@ -34,4 +34,7 @@ public class UserController {
         userService.joinProcess(userDTO);
         return "redirect:/loginForm";
     }
+
+
+
 }

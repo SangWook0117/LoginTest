@@ -105,6 +105,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // http
+        //     .cors(cors -> cors
+        //         .configurationSource(new CorsConfigurationSource() {
+        //             @Override
+        //             public CorsConfiguration getCorsConfiguration(HttpServletRequest request){
+        //                 CorsConfiguration configuration = new CorsConfiguration();
+
+        //                 configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); //허용시킬 포트번호 설정
+        //                 configuration.setAllowedMethods(Collections.singletonList("*")); // 허용시킬 메서드 방식 설정
+        //                 configuration.setAllowCredentials(true);
+        //                 configuration.setAllowedHeaders(Collections.singletonList("*")); // 허용시킬 헤더
+        //                 configuration.setMaxAge(3600L); //받은 허용을 가지고 있을 시간
+
+        //                 configuration.setExposedHeaders(Collections.singletonList("Authorization")); //Authorization 헤더도 허용
+
+        //                 return configuration;
+        //             }
+        //         }));
         //csrf비활성화
         http.csrf(auth -> auth.disable());
         //Form 로그인 방식 비활성화
@@ -121,7 +139,7 @@ public class SecurityConfig {
         http
             .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
             //내가 만든 LoginFilter.java를 생성해서 등록, addFilterAt은 사용할 필터의 위치를 지정, UsernamePasswordAuthenticationFilter 필터를 대체하는 필터를 설정해주는것 
-        //세션 설정 (JWT토큰 방식에서는 세션을 StateLess 방식으로 관리하기 때문에 세션 설정을 해주어야함)
+        //세션 설정 (JWT토큰 방식에서는 세션을 StateLess )방식으로 관리하기 때문에 세션 설정을 해주어야함)
         http
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

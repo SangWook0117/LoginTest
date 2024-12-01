@@ -59,6 +59,10 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
+	//(BouncyCastle)PemParser pem파일 읽으려고 추가함
+	implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
+	implementation 'org.bouncycastle:bcpkix-jdk15on:1.68'
+
 }
 
 dependencyManagement {
