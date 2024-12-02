@@ -32,7 +32,6 @@ public class MainController {
         //role: 위에서 얻은 권한에서 권한의 이름(롤)을 문자열로 가져와서 role 변수에 저장해.
         String role = auth.getAuthority();
 
-
         model.addAttribute("id", id);
         model.addAttribute("role", role);
 
