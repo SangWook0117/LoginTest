@@ -10,9 +10,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
+import com.example.testt.jwt.JWTFilter;
 import com.example.testt.jwt.JWTUtil;
 import com.example.testt.jwt.LoginFilter;
+import com.example.testt.jwt.CustomLogoutFilter;
+import com.example.testt.user.repository.RefreshRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -102,6 +106,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -134,12 +139,19 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
             .requestMatchers("/user/loginForm", "/", "/user/joinForm", "/login").permitAll()
             .requestMatchers("/admin").hasRole("ADMIN")
+            .requestMatchers("/reissue").permitAll()
             .anyRequest().authenticated());
         //커스텀 필터 설정 (폼로그인 대신 설정)
         http
-            .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+        http
+            .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
             //내가 만든 LoginFilter.java를 생성해서 등록, addFilterAt은 사용할 필터의 위치를 지정, UsernamePasswordAuthenticationFilter 필터를 대체하는 필터를 설정해주는것 
         //세션 설정 (JWT토큰 방식에서는 세션을 StateLess )방식으로 관리하기 때문에 세션 설정을 해주어야함)
+        http
+            .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+
+            
         http
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
