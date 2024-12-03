@@ -97,4 +97,39 @@ public class JWTUtil {
     //     }
     //     return privateKey; //PrivateKey를 반환함
     // }
+
+
+    // 로그아웃 버튼을 클릭시 구현할 기능을 통해 얻을 수 있는 이점은 JWT탈취 시간을 줄일 수 있다.
+    // 프론트엔드 : 로컬 스토리지에 존재하는 Access 토큰 삭제 및 서버측 로그아웃 경로로 Refresh 토큰 전송
+    // 백엔드 : 로그아웃 로직을 추가하여 Refresh 토큰을 받아 쿠키 초기화 후 Refresh DB에서 해당 Refresh 토큰 삭제
+    // (모든 계정에서 로그아웃 구현시 username 기반으로 모든 Refresh 토큰 삭제) {JWT심화 9}
+
+
+    // PC의 경우 IP주소가 변경될 일이 거의 없다. IP주소가 변경되는 경우 요청이 거부되도록 진행하면 더욱 보안이 강화된다.
+    // 1. 로그인시 JWT발급과 함께 JWT와 IP를 DB에 저장
+    // 2. Access 토큰으로 요청시 요청 IP와 로그인시 저장한 IP 주소를 대조
+    // 3. Access 토큰 재발급시 새로운 Access 토큰과 IP를 DB에 저장
+
+    // 네이버도 IP주소가 변경될 경우 다시 로그인을 하라는 알림이 나옴.
+
+    /*
+    1. 로그인을 하고 나서 access/refresh 토큰을 발행했습니다. 다음에 로그인 할때는 access 토큰으로 로그인해서 실패가 되면 fresh토큰을 이용해서 access 토큰과 refresh 토큰을 발행하고 다시 access 토큰을 통해서 로그인하는 것이 맞을가요?
+    2. 처음 로그인을 하고나서 access 토큰을 발행하고 main화면으로 이동하려고 하는데 페이지 이동을 하게되면 header에 access 토큰을 실을 수가 없습니다.
+    그럼 access token을 폼 데이터로 넘겨야 하나요? main 화면에서 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();를 호출할 경우 null이 되거나 anonymousUser로 뜹니다.
+    3. refresh 토큰을 RDB가 아닌 redis를 적용하여 강의를 해주실수 없으실가요?
+
+    1.
+    로그인 후 프론트앱(리액트와 같은 웹앱, 모바일앱, 등)으로 발급 받은 JWT(Access/Refresh) 중 기본적으로 대부분의 경로에 대해서 인증을 받아 데이터를 가져오기 위해서 Access JWT를 사용하게 됩니다.
+    (로그인이라고 표현하신 부분이 인증 느낌입니다!)
+    말씀하신대로 이때 Access JWT의 만료로 인증이 실패하는 경우 프론트측으로 인증 실패 응답이 돌아오고, 프론트측에선 실패 로직을 통해 Refresh JWT를 통해 백엔드의 /reissue 경로에 방문하여 새로운 JWT(Access/Refresh)를 발급 받으시면 됩니다!
+    그 후 말씀하신대로 다시 Access JWT를 통해 인증을 진행하시면 됩니다.
+
+    2.
+    프론트측에서 username/password를 받은 후 API Client로 백엔드측에서 로그인 요청을 보내면 백엔드는 응답으로 JWT를 발급합니다.
+    이때 프론트에서 발급 받은 JWT를 로컬스토리지와 같은 저장소에서 관리하셔야 합니다.
+    이후 모든 요청에 대해서 로컬 스토리지에서 Access JWT를 꺼내어 요청 헤더에 붙여주는 작업을 프론트측에서 구현하셔야 백엔드에서 받으실 수 있습니다.
+
+    3.
+    이 부분도 댓글에 요청해 주신 분들이 계셨는데 현재 진행하고 있는 시리즈가 있어 이번 시리즈 끝나고 고민 해보도록 하겠습니다. (오래 걸릴거 같습니다...)
+     */
 }
